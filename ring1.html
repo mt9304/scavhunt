@@ -21,6 +21,7 @@
     <div class="cover-container d-flex h-100 p-3 mx-auto flex-column">
       <main role="main" class="inner cover">
         <div class="choice" id="">
+            <h1 class="cover-heading" id="defaultChoice" style="">Solve the riddle below. </h1>
             <h1 class="cover-heading" id="firstChoice" style="display: none;">I didnt expect u to pick this first but good job. Solve riddle below. </h1>
             <h1 class="cover-heading" id="secondChoice" style="display: none;">Good second choice, i guess u are ok. Solve the riddle below. </h1>
             <h1 class="cover-heading" id="thirdChoice" style="display: none;">You already picked the other 2 first you piece of shit. Solve riddle anyway for a chance at ring. </h1>
@@ -96,28 +97,28 @@
                     if (choice2.exists) {
                       if (choice1.exists) {
                           //Logic that you want is here
-                          if (choice1.data()["choice"] == "none" || choice1.data()["choice"] == "icecream") {
+                          if (choice1.data()["choice"] == "none" || choice1.data()["choice"] == "ring") {
                             defaultChoice.style.display = "none";
                             firstChoice.style.display = "block";
   
                             statusRef.doc("firstChoice").set({
-                              choice: "icecream"
+                              choice: "ring"
                             });
-                          } else if (choice1.data()["choice"] == "coffee" && (choice2.data()["choice"] == "none" || choice2.data()["choice"] == "icecream")) {
+                          } else if (choice1.data()["choice"] == "coffee" && (choice2.data()["choice"] == "none" || choice2.data()["choice"] == "ring")) {
                             defaultChoice.style.display = "none";
                             secondChoice.style.display = "block";
   
                             statusRef.doc("secondChoice").set({
-                              choice: "icecream"
+                              choice: "ring"
                             });
-                          } else if (choice1.data()["choice"] == "ring" && (choice2.data()["choice"] == "none" || choice2.data()["choice"] == "icecream")) {
-                            //defaultChoice.style.display = "none";
-                            //secondChoice.style.display = "block";
+                          } else if (choice1.data()["choice"] == "icecream" && (choice2.data()["choice"] == "none" || choice2.data()["choice"] == "ring")) {
+                            defaultChoice.style.display = "none";
+                            secondChoice.style.display = "block";
   
                             statusRef.doc("secondChoice").set({
-                              choice: "icecream"
+                              choice: "ring"
                             });
-                          } else if ((choice1.data()["choice"] != "icecream" || choice1.data()["choice"] != "none") && (choice2.data()["choice"] != "icecream" || choice2.data()["choice"] != "none")) {
+                          } else if ((choice1.data()["choice"] != "ring" || choice1.data()["choice"] != "none") && (choice2.data()["choice"] != "ring" || choice2.data()["choice"] != "none")) {
                             defaultChoice.style.display = "none";
                             thirdChoice.style.display = "block";
                           }
