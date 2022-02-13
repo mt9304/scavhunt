@@ -20,10 +20,10 @@
         <div class="choice" id="">
             <h1 class="cover-heading firstChoice">Solve this riddle (2/3)</h1>
 
-            <p></p>
+            <p>An activity i do not miss</p>
             <p>I leave the room cuz u get pissed</p>
             <p>Why r u like this</p>
-
+            <br>
             <p>What is it?</p>
             <p>Hint: It sucks</p>
 
@@ -49,7 +49,7 @@
               </div>
               <div style="display: inline-block; width: 10px;"></div>
               <div class="" style="display: inline-block;">
-                <input type="text" maxlength="1" value="M" style="width: 25px;" class="" id="input5">
+                <input type="text" maxlength="1" value="M" style="width: 25px;" class="" id="input6">
               </div>
           </div>
           <br>
@@ -71,24 +71,31 @@
       </footer>
     </div>
 
-    <script type="module">
-      // Import the functions you need from the SDKs you need
-      import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.6/firebase-app.js";
-      // TODO: Add SDKs for Firebase products that you want to use
-      // https://firebase.google.com/docs/web/setup#available-libraries
-    
-      // Your web app's Firebase configuration
-      const firebaseConfig = {
-        apiKey: "AIzaSyBa9LaO4Hn_3Pl26s8E9b44mjONk3ihOj4",
-        authDomain: "scavhunt-1f644.firebaseapp.com",
-        projectId: "scavhunt-1f644",
-        storageBucket: "scavhunt-1f644.appspot.com",
-        messagingSenderId: "443680260314",
-        appId: "1:443680260314:web:bc6098d37078d4ecf425e3"
-      };
-    
-      // Initialize Firebase
-      const app = initializeApp(firebaseConfig);
+    <script>
+      window.onload = function() {
+        var submitButton = document.getElementById("submitButton");
+          submitButton.onclick = function submitAnswer() {
+            console.log("clicked");
+            var input1 = document.getElementById("input1").value.toLowerCase();
+            var input2 = document.getElementById("input2").value.toLowerCase();
+            var input3 = document.getElementById("input3").value.toLowerCase();
+            var input4 = document.getElementById("input4").value.toLowerCase();
+            var input5 = document.getElementById("input5").value.toLowerCase();
+            var input6 = document.getElementById("input6").value.toLowerCase();
+
+            if (input1 == "v" && input2 =="a" && input3 =="c" && input4 == "u" && input5 == "u" && input6 == "m") {
+                var tryAgainMessage = document.getElementById("tryAgain");
+                tryAgainMessage.style.display = "none";
+                var solvedMessage = document.getElementById("solved");
+                solvedMessage.style.display = "block";
+            } else {
+                var solvedMessage = document.getElementById("solved");
+                solvedMessage.style.display = "none";
+                var tryAgainMessage = document.getElementById("tryAgain");
+                tryAgainMessage.style.display = "block";
+            }
+          }
+      }
     </script>
   </body>
 </html>

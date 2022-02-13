@@ -21,10 +21,10 @@
     <div class="cover-container d-flex h-100 p-3 mx-auto flex-column">
       <main role="main" class="inner cover">
         <div class="choice" id="">
-            <h1 class="cover-heading" id="defaultChoice" style="">Solve the riddle below. </h1>
-            <h1 class="cover-heading" id="firstChoice" style="display: none;">I didnt expect u to pick this first but good job. Solve riddle below. </h1>
-            <h1 class="cover-heading" id="secondChoice" style="display: none;">Good second choice, i guess u are ok. Solve the riddle below. </h1>
-            <h1 class="cover-heading" id="thirdChoice" style="display: none;">You already picked the other 2 first you piece of shit. Solve riddle anyway for a chance at ring. </h1>
+            <h1 class="cover-heading" id="defaultChoice" style="">Solve the riddle below (1/3)</h1>
+            <h1 class="cover-heading" id="firstChoice" style="display: none;">I didnt expect u to pick this first but good job. Solve riddle below (1/3)</h1>
+            <h1 class="cover-heading" id="secondChoice" style="display: none;">Good second choice, i guess u are ok. Solve the riddle below (1/3)</h1>
+            <h1 class="cover-heading" id="thirdChoice" style="display: none;">You already picked the other 2 first you piece of shit. Solve riddle anyway for a chance at ring (1/3)</h1>
 
             <p>
                 A word that decent people use, but you don't seem to say. You may not have learned this word yet so I filled in a few letters to help you out. 
@@ -136,7 +136,31 @@
                   console.log("Error getting document:", error);
               });
           }
+
+          var submitButton = document.getElementById("submitButton");
+          submitButton.onclick = function submitAnswer() {
+            console.log("clicked");
+            var input1 = document.getElementById("input1").value.toLowerCase();
+            var input2 = document.getElementById("input2").value.toLowerCase();
+            var input3 = document.getElementById("input3").value.toLowerCase();
+            var input4 = document.getElementById("input4").value.toLowerCase();
+            var input5 = document.getElementById("input5").value.toLowerCase();
+
+            if (input1 == "s" && input2 =="o" && input3 =="r" && input4 == "r" && input5 == "y") {
+                var tryAgainMessage = document.getElementById("tryAgain");
+                tryAgainMessage.style.display = "none";
+                var solvedMessage = document.getElementById("solved");
+                solvedMessage.style.display = "block";
+            } else {
+                var solvedMessage = document.getElementById("solved");
+                solvedMessage.style.display = "none";
+                var tryAgainMessage = document.getElementById("tryAgain");
+                tryAgainMessage.style.display = "block";
+            }
+          }
         }
+
+
       </script>
     </body>
 </html>
