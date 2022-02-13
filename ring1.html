@@ -11,6 +11,9 @@
     <!-- JavaScript Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
   </head>
 
   <body class="text-center">
@@ -23,21 +26,25 @@
             <h1 class="cover-heading" id="thirdChoice" style="display: none;">You already picked the other 2 first you piece of shit. Solve riddle anyway for a chance at ring. </h1>
 
             <p>
-                A word that decent people use. You may not have learned this word yet so I filled in a few letters to help you out. 
+                A word that decent people use, but you don't seem to say. You may not have learned this word yet so I filled in a few letters to help you out. 
             </p>
             <div class="">
                 <div class="" style="display: inline-block;">
                     <input type="text" maxlength="1" value="" style="width: 25px;" class="" id="input1">
                 </div>
+                <div style="display: inline-block; width: 10px;"></div>
                 <div class="" style="display: inline-block;">
                     <input type="text" maxlength="1" value="" style="width: 25px;" class="" id="input2">
                 </div>
+                <div style="display: inline-block; width: 10px;"></div>
                 <div class="" style="display: inline-block;">
                     <input type="text" maxlength="1" value="R" style="width: 25px;" class="" id="input3">
                 </div>
+                <div style="display: inline-block; width: 10px;"></div>
                 <div class="" style="display: inline-block;">
                     <input type="text" maxlength="1" value="" style="width: 25px;" class="" id="input4">
                 </div>
+                <div style="display: inline-block; width: 10px;"></div>
                 <div class="" style="display: inline-block;">
                     <input type="text" maxlength="1" value="Y" style="width: 25px;" class="" id="input5">
                 </div>
@@ -46,10 +53,10 @@
             <div class="btn-primary center" id="submitButton" style="width: 100px; text-align: center; border-radius: 5px; margin: auto;">Submit</div>
         
             <br>
-            <p id="tryAgain">
+            <p id="tryAgain" style="display: none;">
                 WRONG, try again. 
             </p>
-            <p id="solved">
+            <p id="solved" style="display: none;">
                 You got it! Apology accepted, please find the next clue in the dishwasher. 
             </p>
         </div>
@@ -61,24 +68,74 @@
       </footer>
     </div>
 
-    <script type="module">
-        // Import the functions you need from the SDKs you need
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.6/firebase-app.js";
-        // TODO: Add SDKs for Firebase products that you want to use
-        // https://firebase.google.com/docs/web/setup#available-libraries
-      
-        // Your web app's Firebase configuration
-        const firebaseConfig = {
-          apiKey: "AIzaSyBa9LaO4Hn_3Pl26s8E9b44mjONk3ihOj4",
-          authDomain: "scavhunt-1f644.firebaseapp.com",
-          projectId: "scavhunt-1f644",
-          storageBucket: "scavhunt-1f644.appspot.com",
-          messagingSenderId: "443680260314",
-          appId: "1:443680260314:web:bc6098d37078d4ecf425e3"
-        };
-      
-        // Initialize Firebase
-        const app = initializeApp(firebaseConfig);
+    <script>
+        window.onload = function() {
+          //Get URL parameters
+          var queryString = window.location.search;
+          var urlParams = new URLSearchParams(queryString);
+          var code = urlParams.get('code')
+  
+          if (code == "543") {
+              // Initialize Cloud Firestore through Firebase
+              firebase.initializeApp({
+                apiKey: 'AIzaSyBa9LaO4Hn_3Pl26s8E9b44mjONk3ihOj4',
+                authDomain: 'scavhunt-1f644.firebaseapp.com',
+                projectId: 'scavhunt-1f644'
+              });
+  
+              var db = firebase.firestore();
+              var statusRef = db.collection("status");
+  
+              var defaultChoice = document.getElementById("defaultChoice");
+              var firstChoice = document.getElementById("firstChoice");
+              var secondChoice = document.getElementById("secondChoice");
+  
+              statusRef.doc("firstChoice").get().then((choice1) => {
+  
+                statusRef.doc("secondChoice").get().then((choice2) => {
+                    if (choice2.exists) {
+                      if (choice1.exists) {
+                          //Logic that you want is here
+                          if (choice1.data()["choice"] == "none" || choice1.data()["choice"] == "icecream") {
+                            defaultChoice.style.display = "none";
+                            firstChoice.style.display = "block";
+  
+                            statusRef.doc("firstChoice").set({
+                              choice: "icecream"
+                            });
+                          } else if (choice1.data()["choice"] == "coffee" && (choice2.data()["choice"] == "none" || choice2.data()["choice"] == "icecream")) {
+                            defaultChoice.style.display = "none";
+                            secondChoice.style.display = "block";
+  
+                            statusRef.doc("secondChoice").set({
+                              choice: "icecream"
+                            });
+                          } else if (choice1.data()["choice"] == "ring" && (choice2.data()["choice"] == "none" || choice2.data()["choice"] == "icecream")) {
+                            //defaultChoice.style.display = "none";
+                            //secondChoice.style.display = "block";
+  
+                            statusRef.doc("secondChoice").set({
+                              choice: "icecream"
+                            });
+                          } else if ((choice1.data()["choice"] != "icecream" || choice1.data()["choice"] != "none") && (choice2.data()["choice"] != "icecream" || choice2.data()["choice"] != "none")) {
+                            defaultChoice.style.display = "none";
+                            thirdChoice.style.display = "block";
+                          }
+                      } else {
+                          console.log("No such document!");
+                      }
+                      
+                    } else {
+                        console.log("No such document!");
+                    }
+                }).catch((error) => {
+                    console.log("Error getting document:", error);
+                });
+              }).catch((error) => {
+                  console.log("Error getting document:", error);
+              });
+          }
+        }
       </script>
     </body>
 </html>

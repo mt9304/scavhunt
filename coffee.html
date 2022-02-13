@@ -20,6 +20,11 @@
   <body class="text-center">
     <div class="cover-container d-flex h-100 p-3 mx-auto flex-column">
       <main role="main" class="inner cover">
+        <div class="choice" id="defaultChoice" style="">
+          <h1 class="cover-heading">You have picked Coffee. </h1>
+          <p class="lead">Your order will be processed. </p>
+          <img class="lead" src="coffee.png"/>
+        </div>
         <div class="choice" id="firstChoice" style="display: none;">
             <h1 class="cover-heading">Did u really pick coffee first. </h1>
             <p class="lead">You will get a Starbucks. Use your second choice wisely. </p>
@@ -69,35 +74,51 @@
             var db = firebase.firestore();
             var statusRef = db.collection("status");
 
-            statusRef.doc("firstChoice").set({
-              choice: "coffee"
-            });
+            var defaultChoice = document.getElementById("defaultChoice");
+            var firstChoice = document.getElementById("firstChoice");
+            var secondChoice = document.getElementById("secondChoice");
 
-            statusRef.doc("secondChoice").set({
-              choice: "icecream"
-            });
-            console.log("Loaded");
+            statusRef.doc("firstChoice").get().then((choice1) => {
 
-            statusRef.doc("firstChoice").get().then((doc) => {
-                if (doc.exists) {
-                    if (doc.data()["choice"] ) {
+              statusRef.doc("secondChoice").get().then((choice2) => {
+                  if (choice2.exists) {
+                    if (choice1.exists) {
+                        //Logic that you want is here
+                        if (choice1.data()["choice"] == "none" || choice1.data()["choice"] == "coffee") {
+                          defaultChoice.style.display = "none";
+                          firstChoice.style.display = "block";
 
+                          statusRef.doc("firstChoice").set({
+                            choice: "coffee"
+                          });
+                        } else if (choice1.data()["choice"] == "icecream" && (choice2.data()["choice"] == "none" || choice2.data()["choice"] == "coffee")) {
+                          defaultChoice.style.display = "none";
+                          secondChoice.style.display = "block";
+
+                          statusRef.doc("secondChoice").set({
+                            choice: "coffee"
+                          });
+                        } else if (choice1.data()["choice"] == "ring" && (choice2.data()["choice"] == "none" || choice2.data()["choice"] == "coffee")) {
+                          //defaultChoice.style.display = "none";
+                          //secondChoice.style.display = "block";
+
+                          statusRef.doc("secondChoice").set({
+                            choice: "coffee"
+                          });
+                        } else if ((choice1.data()["choice"] != "coffee" || choice1.data()["choice"] != "none") && (choice2.data()["choice"] != "coffee" || choice2.data()["choice"] != "none")) {
+                          defaultChoice.style.display = "none";
+                          thirdChoice.style.display = "block";
+                        }
+                    } else {
+                        console.log("No such document!");
                     }
-                } else {
-                    // doc.data() will be undefined in this case
-                    console.log("No such document!");
-                }
-            }).catch((error) => {
-                console.log("Error getting document:", error);
-            });
-
-            statusRef.doc("secondChoice").get().then((doc) => {
-                if (doc.exists) {
-                    console.log("Document2 data:", doc.data()["choice"]);
-                } else {
-                    // doc.data() will be undefined in this case
-                    console.log("No such document!");
-                }
+                    
+                  } else {
+                      console.log("No such document!");
+                  }
+              }).catch((error) => {
+                  console.log("Error getting document:", error);
+              });
             }).catch((error) => {
                 console.log("Error getting document:", error);
             });
